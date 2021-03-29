@@ -5,8 +5,9 @@ import java.util.List;
 
 public class Temporada {
 
+	// Testar a lógica sem o numEmpisodios no construtor
 	private Integer idTemporada;
-	private Integer numEpisodios;
+	private Integer numEpisodios = 0;
 	
 	private List<Episodio> episodios = new ArrayList<>();
 	
