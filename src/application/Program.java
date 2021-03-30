@@ -1,10 +1,9 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.List;
+ 	
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import entities.Genero;
 import exceptions.DomainException;
 import services.ServicosDeCadastro;
 
@@ -18,7 +17,6 @@ public class Program {
 		
 		do {
 			try {
-				
 				menuOpcoes();
 				int opcao = sc.nextInt();
 			
@@ -27,7 +25,7 @@ public class Program {
 					System.out.print("Digite o id do gênero: ");
 					int idGenero = sc.nextInt();
 					sc.nextLine();
-					System.out.println("Digite a descrição do gênero: ");
+					System.out.print("Digite a descrição do gênero: ");
 					String descricao = sc.nextLine();
 					servico.cadastrarGeneros(idGenero, descricao);
 					finalizar = false;
@@ -62,15 +60,23 @@ public class Program {
 					int espisodioEscolhido = sc.nextInt();
 					System.out.print("Digite o id da temporada: ");
 					int idTemporadaEscolhida = sc.nextInt();
-					servico.registrarEpisodio(espisodioEscolhido, idTemporadaEscolhida);
+					System.out.print("Digite o id da série: ");
+					int serieDoEpsodio = sc.nextInt();
+					sc.nextLine();
+					servico.registrarEpisodio(espisodioEscolhido, idTemporadaEscolhida, serieDoEpsodio);
 					finalizar = false;
 					break;
 				case 5:
+					System.out.print("Digite o id da temporada: ");
+					int idDaTemporadaEscolhida = sc.nextInt();
+					System.out.print("Digite o id da série: ");
+					int idSerieEscolhida = sc.nextInt();
+					sc.nextLine();
 					System.out.print("Digite o id do episódio: ");
 					int idEpisodioEscolhido = sc.nextInt();
 					System.out.print("Digite a duração da transmissão do episódio: ");
 					int tempoDuracao = sc.nextInt();
-					servico.registrarAcesso(idEpisodioEscolhido, tempoDuracao );
+					servico.registrarAcesso(idDaTemporadaEscolhida, idSerieEscolhida, idEpisodioEscolhido, tempoDuracao);
 					finalizar = false;
 					break;
 				case 6:
@@ -80,14 +86,19 @@ public class Program {
 					System.out.println("Valor indefinido!");
 				}
 		}
-			catch (DomainException e) {
-				System.out.println(e.getMessage());
-				sc.nextLine();
-			}
+		catch (DomainException e) {
+			System.out.println(e.getMessage());
+			sc.nextLine();
+		}
+		catch (InputMismatchException e) {
+			System.out.println("Entre com informações válidas!");
+			sc.nextLine();
+		}
 			
 		} while (finalizar == false);
 			
 		System.out.print("Programa encerrado!");
+		sc.close();
 	}
 
 	public static void menuOpcoes() {

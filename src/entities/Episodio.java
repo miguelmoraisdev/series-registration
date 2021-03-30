@@ -7,11 +7,11 @@ public class Episodio {
 	private Integer duracao;
 	private Integer numAcesso;
 	
-	public Episodio(Integer idEpisodio, String titulo, Integer duracao, Integer numAcesso) {
+	public Episodio(Integer idEpisodio, String titulo, Integer duracao) {
 		this.idEpisodio = idEpisodio;
 		this.titulo = titulo;
 		this.duracao = duracao;
-		this.numAcesso = numAcesso;
+		this.numAcesso = 0;
 	}
 	
 	public Integer getIdEpisodio() {
@@ -34,6 +34,7 @@ public class Episodio {
 	public void registrarAcesso(int tempo) {
 		if (tempo > duracao *0.80) {
 			numAcesso++;
+			System.out.println("Acesso registrado!");
 		}
 	}
 	

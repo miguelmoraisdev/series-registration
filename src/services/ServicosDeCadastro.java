@@ -15,8 +15,6 @@ public class ServicosDeCadastro {
 	
 	private List<Genero> generos = new ArrayList<>();
 	private List<Serie> series = new ArrayList<>();
-	private List<Temporada> temporadas = new ArrayList<>();
-	private List<Episodio> episodios = new ArrayList<>();
 	Scanner sc = new Scanner(System.in);
 	
 	public ServicosDeCadastro() {
@@ -42,7 +40,7 @@ public class ServicosDeCadastro {
 			}
 		}
 		if (compareGenero == false) {
-			throw new DomainException("Genêro não cadastrado!");
+			throw new DomainException("Genêro ainda não cadastrado!");
 		}
 	}
 	
@@ -52,11 +50,9 @@ public class ServicosDeCadastro {
 		for (Serie serie : series) {
 			if (idSerie == serie.getIdSerie()) {
 				compareSerie = true;
-				boolean compareTemporada= false;
 				if (serie.getTemporadas().isEmpty()) {
-					compareTemporada = true;
 					serie.inserirTemporada(new Temporada(temporadaEscolhida));	
-					System.out.println(" temporada registrada");
+					System.out.println("Temporada registrada!");
 				}
 				else {
 					for (Temporada temporada: serie.getTemporadas()){
@@ -64,54 +60,92 @@ public class ServicosDeCadastro {
 							throw new DomainException("Temporada já cadastrada!");
 						}
 					}
-					compareTemporada = true;
 					serie.inserirTemporada(new Temporada(temporadaEscolhida));
-					System.out.println(" tempoarada registrada");
+					System.out.println("Tempoarada registrada!");
 				}
 			}
 		}
 		if (compareSerie == false) {
-			throw new DomainException("Série não cadastrada!");
+			throw new DomainException("Série ainda não cadastrada!");
 		} 
 	}
 	
-	public void registrarEpisodio(int idEpisodio, int idTemporada) {
-		for (Temporada temporada : temporadas) {
-			if (idTemporada == temporada.getIdTemporada()) {
-				for (Episodio episodio : episodios) {
-					if (idEpisodio != episodio.getIdEpisodio()) {
-						int numAcesso = 0;
-						System.out.print("Digite a duração do episódio: ");
-						int duracao = sc.nextInt();
-						sc.nextLine();
-						System.out.print("Digite o titulo do episódio: ");
-						String titulo = sc.nextLine();
-						episodios.add(new Episodio(idEpisodio, titulo, duracao, numAcesso));
-					}
-					else {
-						throw new DomainException("Esse episódio já está cadastrado!");
+	public void registrarEpisodio(int idEpisodio, int temporadaEscolhida, int idSerie) {
+		boolean compareSerie = false;
+		boolean compareTemporada = false;
+		
+		System.out.print("Digite a duração do episódio: ");
+		int duracao = sc.nextInt();
+		sc.nextLine();
+		System.out.print("Digite o titulo do episódio: ");
+		String titulo = sc.nextLine();
+		
+		for (Serie serie : series) {
+			if (idSerie == serie.getIdSerie()) {
+				compareSerie = true;
+				for (Temporada temporada: serie.getTemporadas()) {
+					if (temporada.getIdTemporada().equals(temporadaEscolhida)) {
+						if (temporada.getEpsodios().isEmpty()) {
+							temporada.inserirEpisodios(new Episodio(idEpisodio, titulo, duracao));
+							compareTemporada = true;
+							System.out.println("Episódio registrado");
+						}
+						else {
+							for (Episodio episodio : temporada.getEpsodios()){
+								if (episodio.getIdEpisodio().equals(idEpisodio)) {
+									throw new DomainException("Episodio já cadastrado!");
+								}
+							}
+							temporada.inserirEpisodios(new Episodio(idEpisodio, titulo, duracao));
+							compareTemporada = true;
+							System.out.println("Episódio registrado");
+						}
 					}
 				}
-			}
-			else {
-				throw new DomainException("Essa temporada não está cadastrada!");
+				if (compareTemporada == false) {
+					throw new DomainException("Temporada ainda não cadastrada!");
+				}
 			}
 		}
-	}
+		if (compareSerie == false) {
+			throw new DomainException("Série ainda não cadastrada!");
+		}
+}
 	
-	public void registrarAcesso(int idEpisodio, int tempoDuracao) {
-		for (Episodio episodio : episodios) {
-			if (idEpisodio == episodio.getIdEpisodio()) {
-				if (tempoDuracao > episodio.getDuracao()) {
-					throw new DomainException("Tempo informado maior do que a duração do episódio!");
+	public void registrarAcesso(int idDaTemporadaEscolhida, int idSerieEscolhida, int idEpisodio, int tempoDuracao) {
+		boolean compareSerie = false;
+		boolean compareTemporada = false;
+		boolean compareEpisodio = false;
+		
+		for (Serie serie : series) {
+			if (idSerieEscolhida == serie.getIdSerie()) {
+				compareSerie = true;
+				for (Temporada temporada: serie.getTemporadas()) {
+					if (temporada.getIdTemporada().equals(idDaTemporadaEscolhida)) {
+						compareTemporada = true;
+						for (Episodio episodio : temporada.getEpsodios()) {
+							if (episodio.getIdEpisodio().equals(idEpisodio)) {
+								compareEpisodio = true;
+								if (tempoDuracao > episodio.getDuracao()) {
+									throw new DomainException("Duração fornecida maior do que a duração do episódio!");
+								}
+								else {
+									episodio.registrarAcesso(tempoDuracao);
+								}
+							}
+						}
+						if (compareEpisodio == false) {
+							throw new DomainException("Episodio ainda não cadastrado!");
+						}
+					}
 				}
-				else {
-					episodio.registrarAcesso(tempoDuracao);
-				}	
-			}
-			else {
-				throw new DomainException("Esse episódio não está cadastrado!");
+				if (compareTemporada == false) {
+					throw new DomainException("Temporada ainda não cadastrada!");
+				}
 			}
 		}
-	}
+		if (compareSerie == false) {
+			throw new DomainException("Série ainda não cadastrada!");
+		}
+}
 }
