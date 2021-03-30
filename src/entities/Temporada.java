@@ -7,13 +7,13 @@ public class Temporada {
 
 	// Testar a lógica sem o numEmpisodios no construtor
 	private Integer idTemporada;
-	private Integer numEpisodios = 0;
+	private Integer numEpisodios;
 	
 	private List<Episodio> episodios = new ArrayList<>();
 	
-	public Temporada(Integer idTemporada, Integer numEpisodios) {
+	public Temporada(Integer idTemporada) {
 		this.idTemporada = idTemporada;
-		this.numEpisodios = numEpisodios;
+		this.numEpisodios = 0;
 	}
 
 	public Integer getIdTemporada() {

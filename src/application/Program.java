@@ -79,7 +79,7 @@ public class Program {
 				default:
 					System.out.println("Valor indefinido!");
 				}
-			}
+		}
 			catch (DomainException e) {
 				System.out.println(e.getMessage());
 				sc.nextLine();

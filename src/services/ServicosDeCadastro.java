@@ -44,56 +44,35 @@ public class ServicosDeCadastro {
 		if (compareGenero == false) {
 			throw new DomainException("Genêro não cadastrado!");
 		}
-		/*
-		List<Genero> escolhido = generos.stream().filter(x -> x.getIdGenero() == idGenero).collect(Collectors.toList());
-		for (Genero genero : escolhido) {
-			if (idGenero == genero.getIdGenero()){
-				Serie serie = new Serie(idSerie, titulo, classificacaoEtaria, ano, genero);
-				System.out.println("ID Serie: " + serie.getIdSerie());
-				series.add(serie);	
-			}
-			else {
-				throw new DomainException("Genêro não cadastrado!");
-			}
-		}
-		/* for (Genero genero : generos) {
-			if (idGenero == genero.getIdGenero()) {
-				Serie serie = new Serie(idSerie, titulo, classificacaoEtaria, ano, genero);
-				System.out.println("ID Serie: " + serie.getIdSerie());
-				series.add(serie);
-				break;
-			}
-			else {
-				System.out.println("Genêro não cadastrado!");
-			} 
-		} */
 	}
 	
-	public void registrarTemporada(int idTemporada, int idSerie)  {
+	public void registrarTemporada(int temporadaEscolhida, int idSerie)  {
 		boolean compareSerie = false;
-		boolean compareTemporada;
-		
-		for (Serie serie : series) {
-			
-		}
-		/*
+	
 		for (Serie serie : series) {
 			if (idSerie == serie.getIdSerie()) {
-				for (Temporada temporada : temporadas) {
-					if (idTemporada != temporada.getIdTemporada()) {
-						int numEpisodios = 0;
-						temporadas.add(new Temporada(idTemporada, numEpisodios));    
-						
+				compareSerie = true;
+				boolean compareTemporada= false;
+				if (serie.getTemporadas().isEmpty()) {
+					compareTemporada = true;
+					serie.inserirTemporada(new Temporada(temporadaEscolhida));	
+					System.out.println(" temporada registrada");
+				}
+				else {
+					for (Temporada temporada: serie.getTemporadas()){
+						if (temporada.getIdTemporada().equals(temporadaEscolhida)) {
+							throw new DomainException("Temporada já cadastrada!");
+						}
 					}
-					if (idTemporada == temporada.getIdTemporada()) {
-						throw new DomainException("Essa temporada já está cadastrada!");
-					}
+					compareTemporada = true;
+					serie.inserirTemporada(new Temporada(temporadaEscolhida));
+					System.out.println(" tempoarada registrada");
 				}
 			}
-			else if (idSerie != serie.getIdSerie()) {
-				throw new DomainException("Essa série não está cadastrada!");
-			}
-		} */
+		}
+		if (compareSerie == false) {
+			throw new DomainException("Série não cadastrada!");
+		} 
 	}
 	
 	public void registrarEpisodio(int idEpisodio, int idTemporada) {
